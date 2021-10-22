@@ -118,10 +118,11 @@ function draw() {
    } 
     
     //saltar quando a tecla de espaço é pressionada
-    if(((keyDown("space") || mousePressedOver(jumpBtn))&& trex.velocityY == 0 && !ia) || (ia &&  trexIa.isTouching(grupodeobstaculos)&& trex.velocityY == 0 ))  {
+    if(((keyDown("space") || mousePressedOver(jumpBtn) || touches.length > 0)&& trex.velocityY == 0 && !ia) || (ia &&  trexIa.isTouching(grupodeobstaculos)&& trex.velocityY == 0 ))  {
        trex.velocityY = -12;
        somSalto.play()
-  }
+       touches = [];
+    }
     
     //Fazer a I.A.
     trexIa.visible = false;
