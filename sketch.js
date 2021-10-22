@@ -31,6 +31,7 @@ function preload(){
     
   imgReiniciar = loadImage("restart.png")
   imgFimDeJogo = loadImage("gameOver.png")
+  imgJumpBtn = loadImage("jumpBtn.png")
   
   somSalto = loadSound("jump.mp3")
   somMorte = loadSound("die.mp3")
@@ -38,7 +39,13 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(600, 200);
+  createCanvas(windowWidth, windowHeight);
+  
+  width1 =windowWidth 
+  height1 =windowHeight
+  
+  jumpBtn = createSprite(windowWidth/2,windowHeight-100)
+  jumpBtn.addImage(imgJumpBtn)
   
   trexIa = createSprite(0,0,100,80)
   
@@ -52,10 +59,10 @@ function setup() {
   solo.addImage("ground",imagemdosolo);
   solo.x = solo.width /2;
     
-  fimDeJogo = createSprite(300,100);
+  fimDeJogo = createSprite(windowWidth/2,100);
   fimDeJogo.addImage(imgFimDeJogo);
   
-  reiniciar = createSprite(300,140);
+  reiniciar = createSprite(windowWidth/2,140);
   reiniciar.addImage(imgReiniciar);
   
   fimDeJogo.scale = 0.5;
@@ -77,9 +84,20 @@ function setup() {
 
 function draw() {
   
+  
+  
+  if (width1 != windowWidth || height1 != windowHeight) {
+    
+    createCanvas(windowWidth, windowHeight);
+     
+    width1 =windowWidth 
+    height1 =windowHeight
+    
+  }
+  
   background(180);
   //exibindo pontuação
-  text("Pontuação: "+ pontuacao, 500,50);
+  text("Points: "+ pontuacao, 500,50);
   
   
   if(estadoJogo === JOGAR){
@@ -97,10 +115,10 @@ function draw() {
     
     if (solo.x < 0){
       solo.x = solo.width/2;
-    }
+   } 
     
     //saltar quando a tecla de espaço é pressionada
-    if((keyDown("space")&& trex.velocityY == 0 && !ia) || (ia &&  trexIa.isTouching(grupodeobstaculos)&& trex.velocityY == 0 ))  {
+    if(((keyDown("space") || mousePressedOver(jumpBtn))&& trex.velocityY == 0 && !ia) || (ia &&  trexIa.isTouching(grupodeobstaculos)&& trex.velocityY == 0 ))  {
        trex.velocityY = -12;
        somSalto.play()
   }
@@ -169,7 +187,7 @@ function draw() {
 
 function gerarObstaculos(){
  if (frameCount % 60 === 0){
-   var obstaculo = createSprite(750,165,10,40);
+   var obstaculo = createSprite(windowWidth+50,165,10,40);
   obstaculo.velocityX = -6;
       
     //gerar obstáculos aleatórios
@@ -202,7 +220,7 @@ function gerarObstaculos(){
 function gerarNuvens() {
   //escreva o código aqui para gerar as nuvens 
   if (frameCount % 60 === 0) {
-    nuvem = createSprite(600,100,40,10);
+    nuvem = createSprite(windowWidth+50,100,40,10);
     nuvem.y = Math.round(random(10,60));
     nuvem.addImage(imagemdanuvem);
     nuvem.scale = 0.5;
@@ -227,7 +245,7 @@ function reset () {
   
   trex.changeAnimation("running",trex_correndo)
   
-  pontacao = 0;
+  pontuacao = 0;
   
   estadoJogo = JOGAR
   
